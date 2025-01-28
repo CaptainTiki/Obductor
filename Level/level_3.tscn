@@ -1,12 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://ch7g4iq2wsbrf"]
+[gd_scene load_steps=6 format=3 uid="uid://c83fok0ck7xkf"]
 
-[ext_resource type="PackedScene" uid="uid://bkvthotdx3sdw" path="res://player.tscn" id="1_t3tcx"]
-[ext_resource type="PackedScene" uid="uid://df1ly45aljstp" path="res://Lowpoly Landscape.fbx" id="2_gdkwr"]
+[ext_resource type="Script" path="res://Level/landing_pad.gd" id="1_dg2wy"]
+[ext_resource type="PackedScene" uid="uid://bkvthotdx3sdw" path="res://player.tscn" id="2_gja5s"]
 
 [sub_resource type="Environment" id="Environment_ijc01"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tab4j"]
 albedo_color = Color(0.478431, 0.372549, 0.258824, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8il57"]
+albedo_color = Color(0.308, 0.3472, 0.7, 1)
 
 [node name="Level" type="Node3D"]
 
@@ -17,7 +20,7 @@ environment = SubResource("Environment_ijc01")
 transform = Transform3D(0.171359, -0.748274, 0.640877, 0.405069, 0.646484, 0.646512, -0.898084, 0.148814, 0.413883, 2.60306, 3.13027, 1.77353)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.927765, 0.373166, 0, -0.373166, 0.927765, 0, 20.1419, 52.5304)
+transform = Transform3D(1, 0, 0, 0, 0.927765, 0.373166, 0, -0.373166, 0.927765, 0, 3.03645, 10.0029)
 
 [node name="Floor" type="CSGBox3D" parent="." groups=["Hazard"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
@@ -25,18 +28,26 @@ use_collision = true
 size = Vector3(30, 4, 2)
 material = SubResource("StandardMaterial3D_tab4j")
 
+[node name="Floor2" type="CSGBox3D" parent="." groups=["Hazard"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0)
+use_collision = true
+size = Vector3(15, 3, 1.5)
+material = SubResource("StandardMaterial3D_8il57")
+
 [node name="LaunchPad" type="CSGBox3D" parent="." groups=["Safe"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.125, 0)
 use_collision = true
 size = Vector3(1, 0.25, 1)
 
-[node name="LandingPad" type="CSGBox3D" parent="." groups=["Hazard"]]
+[node name="LandingPad" type="CSGBox3D" parent="." groups=["Goal", "Safe"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.125, 0)
 use_collision = true
 size = Vector3(1, 0.25, 1)
+script = ExtResource("1_dg2wy")
+file_path = "res://Level/level.tscn"
 
-[node name="Player" parent="." instance=ExtResource("1_t3tcx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05719, 4.40015, 24.2287)
+[node name="Player" parent="." instance=ExtResource("2_gja5s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.26, 0)
 axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
@@ -44,10 +55,5 @@ contact_monitor = true
 max_contacts_reported = 10
 linear_damp = 1.0
 angular_damp = 3.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-
-[node name="Lowpoly Landscape" parent="MeshInstance3D" instance=ExtResource("2_gdkwr")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 8.55723, 0)
 
 [connection signal="body_entered" from="Player" to="Player" method="_on_body_entered"]

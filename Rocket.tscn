@@ -1,0 +1,64 @@
+[gd_scene load_steps=11 format=3 uid="uid://d2ful6s6j6xv7"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_jrga0"]
+[ext_resource type="AudioStream" uid="uid://d301ok03q1ham" path="res://Assets/Audio/SFX - Death Explosion.ogg" id="3_y2cky"]
+[ext_resource type="AudioStream" uid="uid://cylsmpthql1cn" path="res://Assets/Audio/SFX - Success.ogg" id="4_xstn7"]
+[ext_resource type="AudioStream" uid="uid://8cpqammr6huk" path="res://Assets/Audio/SFX - Main engine thrust.ogg" id="5_6saic"]
+[ext_resource type="PackedScene" uid="uid://dcecb8hw7dbrv" path="res://Assets/Particles/explosion_particles.tscn" id="7_0thgh"]
+[ext_resource type="PackedScene" uid="uid://2lqloh6q4hbp" path="res://Helo2.fbx" id="7_pl2dj"]
+[ext_resource type="PackedScene" uid="uid://jfwajmrh6ca7" path="res://Assets/Particles/success_particles.tscn" id="8_50xwk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i1a1b"]
+size = Vector3(1.19202, 0.121094, 0.702637)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3uxm3"]
+size = Vector3(1.22389, 0.559998, 0.702637)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mi0n2"]
+size = Vector3(1.47485, 0.299042, 0.702637)
+
+[node name="RigidBody3D" type="RigidBody3D"]
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+contact_monitor = true
+max_contacts_reported = 10
+linear_damp = 1.0
+angular_damp = 3.0
+script = ExtResource("1_jrga0")
+thrust = 750.0
+torque_thrust = 75.0
+
+[node name="Helo2" parent="." instance=ExtResource("7_pl2dj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.205939, 0)
+
+[node name="Collision_Skids" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0136648, 0.0806132, 0.00317383)
+shape = SubResource("BoxShape3D_i1a1b")
+
+[node name="Collision_BodyFront" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.202424, 0.456794, 0.00317383)
+shape = SubResource("BoxShape3D_3uxm3")
+
+[node name="Collision_Tail" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.985313, -0.17076, 0, 0.17076, 0.985313, 0, 0, 0, 1, 1.09574, 0.577627, 0.00317383)
+shape = SubResource("BoxShape3D_mi0n2")
+
+[node name="AudioManager" type="Node3D" parent="."]
+
+[node name="ExplosionAudio" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("3_y2cky")
+
+[node name="SuccessAudio" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("4_xstn7")
+
+[node name="RocketAudio" type="AudioStreamPlayer3D" parent="AudioManager"]
+stream = ExtResource("5_6saic")
+
+[node name="ParticleEmitters" type="Node3D" parent="."]
+
+[node name="ExplosionParticles" parent="ParticleEmitters" instance=ExtResource("7_0thgh")]
+
+[node name="SuccessParticles" parent="ParticleEmitters" instance=ExtResource("8_50xwk")]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

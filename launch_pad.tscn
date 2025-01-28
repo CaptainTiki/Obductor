@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2g77s5ix2qba"]
+
+[ext_resource type="PackedScene" uid="uid://c6c47cmta4fve" path="res://Tarmac1.fbx" id="1_6i5op"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gjx5w"]
+size = Vector3(0.505188, 0.0425262, 0.496582)
+
+[node name="LaunchPad" type="Node3D"]
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00619507, -0.000236511, -0.00170898)
+shape = SubResource("BoxShape3D_gjx5w")
+
+[node name="Tarmac1" parent="." instance=ExtResource("1_6i5op")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
